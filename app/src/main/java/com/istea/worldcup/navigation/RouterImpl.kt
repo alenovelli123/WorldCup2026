@@ -2,10 +2,13 @@ package com.istea.worldcup.navigation
 
 import androidx.navigation.NavController
 
-class RouterImpl(val navController: NavController): Router {
+class RouterImpl(
+    private val navController: NavController
+) : Router {
 
     override fun openGroupDetail(groupId: String) {
-        navController.navigate("detalle/J")
+        // ✅ Usar el ID real del grupo
+        navController.navigate("detalle/$groupId")
     }
 
     override fun back() {

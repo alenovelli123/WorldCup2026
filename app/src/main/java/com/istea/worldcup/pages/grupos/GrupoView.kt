@@ -44,19 +44,25 @@ fun GruposView(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             BackgroundImage()
+
             when (state) {
-                GruposState.Cargando -> Text("Cargando...")
-                is GruposState.Resultado -> GroupsList(grupos = state.grupos){
+                GruposState.Cargando -> Cargando()
+
+                is GruposState.Resultado -> GroupsList(grupos = state.grupos) {
                     onAction(OnGrupoClick(it))
                 }
-                GruposState.Vacio -> Text(text = "")
+
+                GruposState.Vacio -> Text("")
             }
         }
     }
 }
 
 @Composable
-fun GroupsList(grupos: List<Group>, onGrupoClick: (String) -> Unit){
+fun GroupsList(
+    grupos: List<Group>,
+    onGrupoClick: (String) -> Unit
+) {
     LazyColumn(Modifier.padding(16.dp)) {
         items(grupos) { grupo ->
             GroupCardView(grupo = grupo) {
@@ -81,14 +87,17 @@ fun GroupCardView(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+
+            // ✅ PUNTO 3: Mostrar el nombre REAL del grupo (Grupo A, Grupo B...)
             Text(
-                text = "grupo.name",
+                text = grupo.name,   // <-- CORRECTO
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(12.dp))
+
             grupo.teams.forEach { team ->
                 Text(
                     text = team,
@@ -105,7 +114,7 @@ fun GroupCardView(
 @Composable
 fun BackgroundImage() {
     Image(
-        painter = painterResource(R.drawable.logo_viejo),
+        painter = painterResource(R.drawable.logo_2026),   // ✅ PUNTO 2 resuelto
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -116,11 +125,10 @@ fun BackgroundImage() {
 
 @Composable
 fun Cargando() {
-    Box (
-        modifier = Modifier
-            .fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CircularProgressIndicator(
             modifier = Modifier.size(160.dp),
             strokeWidth = 20.dp,

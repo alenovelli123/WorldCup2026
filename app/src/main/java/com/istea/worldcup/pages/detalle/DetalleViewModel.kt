@@ -1,6 +1,5 @@
 package com.istea.worldcup.pages.detalle
 
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,26 +8,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.istea.worldcup.domain.Repository
 import com.istea.worldcup.navigation.Router
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DetalleViewModel(
-    val repositorio: Repository,
-    val router: Router,
-    val groupID: String
+    private val repositorio: Repository,
+    private val router: Router,
+    private val groupID: String
 ) : ViewModel() {
 
     var uiState by mutableStateOf<DetalleState>(DetalleState.Vacio)
 
     fun ejecutar(intencion: DetalleIntencion) {
         when(intencion){
-            is DetalleIntencion.IrParaAtras -> { }
+            is DetalleIntencion.IrParaAtras -> irParaAtras()   // ✅ AHORA FUNCIONA
             is DetalleIntencion.CargarContenido -> cargarContenido()
         }
     }
 
     private fun irParaAtras(){
-        router.back()
+        router.back()     // ✅ ahora sí vuelve atrás
     }
 
     private fun cargarContenido(){
@@ -45,7 +43,6 @@ class DetalleViewModel(
     }
 }
 
-
 class DetalleViewModelFactory(
     private val repositorio: Repository,
     private val router: Router,
@@ -54,7 +51,7 @@ class DetalleViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetalleViewModel::class.java)) {
-            return DetalleViewModel(repositorio,router,groupID) as T
+            return DetalleViewModel(repositorio, router, groupID) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
